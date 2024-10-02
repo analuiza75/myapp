@@ -1,4 +1,5 @@
 import 'package:google_fonts/google_fonts.dart';
+import 'package:myapp/pages/home.dart';
 import 'package:flutter/material.dart';
 
 
@@ -73,7 +74,7 @@ class _AtEstudeState extends State<AtEstude> {
                  validator: (value){
                    if(value!.isEmpty){
                      return 'Campo e-mail obrigatório.';
-                   }else if(value.contains('@')){
+                   }else if(value!.contains('@')){
                      return null;
                    }else{
                      return 'Informe um e-mail válido';
@@ -131,7 +132,7 @@ class _AtEstudeState extends State<AtEstude> {
                  validator: (value){
                    if(value!.isNotEmpty){
                      return 'Campo senha obrigatório.';
-                   }else if(value.length>=8){
+                   }else if(value! .length>=8){
                      return null;
                    }else{
                      return 'Informe uma senha válida';
@@ -156,7 +157,7 @@ class _AtEstudeState extends State<AtEstude> {
                  validator: (value){
                    if(value!.isEmpty){
                      return 'Campo senha obrigatório.';
-                   }else if(value.length>=8){
+                   }else if(value! .length>=8){
                      return null;
                    }else{
                      return 'Informe uma senha válida';
@@ -186,11 +187,12 @@ class _AtEstudeState extends State<AtEstude> {
 
                      if(senha == senha2){
                        Navigator.pushReplacement(context,
-                           Menu1(
-                             builder: (context){
-                               return Menu1();
-                             }
-                           ),);
+                          MaterialPageRoute(builder: 
+                           (context) {
+                              return Home();
+                            },
+                          ),
+                           );
                      }else{
                        print('Senha incorreta');
                      }
