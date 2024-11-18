@@ -31,7 +31,7 @@ class _conteudoState extends State<Conteudo> {
                ),
                Expanded(
                  child: Text(
-                   "Conteúdos que mais caem no enem!",
+                   "Conteúdos que mas caem no enem!",
                    style: GoogleFonts.montserrat(
                      fontWeight: FontWeight.bold,
                      fontSize: 26,
