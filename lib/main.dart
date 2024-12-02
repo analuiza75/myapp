@@ -1,12 +1,11 @@
-
 import 'package:flutter/material.dart';
-import 'package:myapp/pages/conteudos_enem.dart';
-
+import 'package:myapp/pages/login.dart';
 
 void main() {
   runApp(
-    const MaterialApp(
-      home: ConteudosEnem(),
-    ),
+    MaterialApp(
+      home: tela1(),
+    )
   );
+
 }
