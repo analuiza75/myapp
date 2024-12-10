@@ -1,4 +1,7 @@
-import 'package:myapp/domain/telahistoria.dart';
+
+
+
+import '../domain/telahistoria.dart';
 
 class Database {
   static List conteudos = [
