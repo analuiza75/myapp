@@ -1,6 +1,5 @@
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/pages/home.dart';
-import 'package:myapp/domain/singup.dart';
 import 'package:flutter/material.dart';
 
 class AtEstude extends StatefulWidget {
