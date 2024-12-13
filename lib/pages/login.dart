@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:myapp/db/SharedPrefs.dart';
+import 'package:myapp/db/userr_dao.dart';
+import 'package:myapp/domain/user.dart';
 import 'Home.dart';
 import 'sing.dart';
 
-class tela1 extends StatefulWidget {
-  const tela1({super.key});
+class Tela1 extends StatefulWidget {
+  const Tela1({super.key});
 
   @override
-  State<tela1> createState() => _tela1State();
+  State<Tela1> createState() => _Tela1State();
 }
 
-class _tela1State extends State<tela1> {
+class _Tela1State extends State<Tela1> {
   TextEditingController emailController = TextEditingController();
   TextEditingController senhaController = TextEditingController();
 
@@ -19,6 +22,7 @@ class _tela1State extends State<tela1> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color(0xFF66A9CF),
@@ -93,81 +97,63 @@ class _tela1State extends State<tela1> {
                                 Icons.lock_outline,
                               ),
                             ),
-                            const SizedBox(height: 32),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('Remember me',
-                                    style: GoogleFonts.montserrat(
-                                        fontSize: 10, color: Colors.blue)),
-                                Text('Forgot Password?',
-                                    style: GoogleFonts.montserrat(
-                                        fontSize: 10, color: Colors.blue)),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 16,
-                            ),
-                            const SizedBox(
-                              height: 12,
-                            ),
+                            const SizedBox(height: 16),
                             ElevatedButton(
-                              onPressed: () {
-                                if (formKey.currentState!.validate()) {
-                                  String email = emailController.text;
-                                  String senha = senhaController.text;
-
-                                  if (email == 'dri@gmail.com' &&
-                                      senha == '1234567') {
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return const Home();
-                                        },
-                                      ),
-                                    );
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          "E-mail e/ou Senha incorreto(s)",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                        backgroundColor: Colors.red,
-                                      ),
-                                    );
-                                  }
-                                }
-                              },
+                              onPressed: onPressed,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFF5AC22D),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 10,
+                                  horizontal: 78,
+                                ),
                               ),
                               child: Text(
                                 'Login',
                                 style: GoogleFonts.montserrat(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12,
                                   color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                ),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return const AtEstude();
+                                    },
+                                  ),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 4,
+                                  horizontal: 32,
                                 ),
                               ),
+                              child: Text(
+                                'Criar uma nova conta',
+                                style: GoogleFonts.montserrat(
+                                  color: Color(0xFF3685CD),
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
+                              ),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('Don’t have an account? ',
-                                    style: GoogleFonts.montserrat(
-                                        fontSize: 11, color: Colors.black)),
-                                Text('Create an account? ',
-                                    style: GoogleFonts.montserrat(
-                                        fontSize: 11, color: Colors.blue)),
-                              ],
                             ),
-                          ],
+                        ],
                         ),
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ],
@@ -177,7 +163,7 @@ class _tela1State extends State<tela1> {
     );
   }
 
-  buildInputDecoration(String label, IconData iconData) {
+  InputDecoration buildInputDecoration(String label, IconData iconData) {
     return InputDecoration(
       prefixIcon: Icon(iconData),
       labelText: label,
@@ -195,9 +181,27 @@ class _tela1State extends State<tela1> {
     );
   }
 
+  Future<void> onPressed() async {
+    if (formKey.currentState!.validate()) {
+      String email = emailController.text;
+      String senha = senhaController.text;
 
+      bool auth = await UserDao().autenticar(email, senha);
 
+      if (auth) {
+        SharedPrefs().setUser(true);
 
-
-
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return Home();
+            },
+          ),
+        );
+      } else {
+        print('E-mail e/ou Senha incorreto(s)');
+      }
+    }
+  }
 }
