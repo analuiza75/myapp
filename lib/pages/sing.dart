@@ -1,25 +1,32 @@
 import 'package:google_fonts/google_fonts.dart';
-import 'package:myapp/pages/home.dart';
-import 'package:myapp/domain/singup.dart';
+import 'package:myapp/domain/user.dart';
 import 'package:flutter/material.dart';
 
-class AtEstude extends StatefulWidget {
-  const AtEstude({super.key});
+import '../db/DBHelper2.dart';
+import '../db/SharedPrefs.dart';
+import '../db/user_dao.dart';
+import 'InformacoesExtras.dart';
+import 'InformacoesExtras.dart';
+
+class AtEstudeee extends StatefulWidget {
+  const AtEstudeee({super.key});
 
   @override
-  State<AtEstude> createState() => _AtEstudeState();
+  State<AtEstudeee> createState() => _AtEstudeState();
 }
 
-class _AtEstudeState extends State<AtEstude> {
-  TextEditingController emailController = TextEditingController();
-  TextEditingController nomeController = TextEditingController();
+class _AtEstudeState extends State<AtEstudeee> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController senhaController = TextEditingController();
   TextEditingController senhaController2 = TextEditingController();
 
   // Key
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  @override
+  initState()  {
+    super.initState();
 
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,38 +61,11 @@ class _AtEstudeState extends State<AtEstude> {
           Padding(
             padding: const EdgeInsets.all(16),
             child: Form(
-              key: formKey, // Aqui é onde você conecta a chave do formulário
+              key: formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  TextFormField(
-                    controller: emailController,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Campo e-mail obrigatório.';
-                      } else if (value.contains('@')) {
-                        return null;
-                      } else {
-                        return 'Informe um e-mail válido';
-                      }
-                    },
-                    decoration: InputDecoration(
-                      hintText: 'Email',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8)),
-                      hintStyle: GoogleFonts.montserrat(fontSize: 12),
-                    ),
-                  ),
-                  SizedBox(height: 24),
-                  TextFormField(
-                    controller: nomeController,
-                    decoration: InputDecoration(
-                      hintText: 'Full name',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8)),
-                      hintStyle: GoogleFonts.montserrat(fontSize: 12),
-                    ),
-                  ),
+
                   SizedBox(height: 24),
                   TextFormField(
                     controller: usernameController,
@@ -146,14 +126,15 @@ class _AtEstudeState extends State<AtEstude> {
                         String senha2 = senhaController2.text;
 
                         if (senha == senha2) {
-                          Navigator.pushReplacement(
+                          /* Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder: (context) {
                                 return Home();
                               },
                             ),
-                          );
+                          );*/
+                          this.onPressed();
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content:
@@ -189,5 +170,27 @@ class _AtEstudeState extends State<AtEstude> {
         ],
       ),
     );
+  }
+
+  Future<void> onPressed() async {
+    if (formKey.currentState!.validate()) {
+      String userNam = usernameController.text;
+      String senha = senhaController.text;
+
+      User user = User(username: userNam, password: senha);
+      UserDao().saveUser(user);
+      SharedPrefs().setUser(true);
+      SharedPrefs().saveUsername(userNam);
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("CADASTRO REALIZADO COM SUCESSO!"),backgroundColor: Colors.red,duration: Duration(seconds: 3), ));
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) {
+            return TelaInformacoesExtras(username: userNam,);
+          },
+        ),
+      );
+    }
   }
 }
