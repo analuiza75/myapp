@@ -3,8 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/db/SharedPrefs.dart';
 import 'package:myapp/db/userr_dao.dart';
 import 'package:myapp/domain/user.dart';
+import 'package:myapp/pages/AtEstude.dart';
 import 'Home.dart';
-import 'sing.dart';
 
 class Tela1 extends StatefulWidget {
   const Tela1({super.key});
