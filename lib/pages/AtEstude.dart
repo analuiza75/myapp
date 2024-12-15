@@ -1,6 +1,7 @@
 import 'package:google_fonts/google_fonts.dart';
+import 'package:myapp/db/userr_dao.dart';
+import 'package:myapp/domain/user.dart';
 import 'package:myapp/pages/home.dart';
-import 'package:myapp/domain/singup.dart';
 import 'package:flutter/material.dart';
 
 class AtEstude extends StatefulWidget {
@@ -189,5 +190,16 @@ class _AtEstudeState extends State<AtEstude> {
         ],
       ),
     );
+  }
+
+  Future<void> onPressed() async {
+    if (formKey.currentState!.validate()) {
+      String email = emailController.text;
+      String senha = senhaController.text;
+
+      User user = User(email, senha);
+      UserDao().saveUser(user);
+      Navigator.pop(context);
+    }
   }
 }
