@@ -1,6 +1,5 @@
 
 import 'dart:async';
-
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -26,8 +25,5 @@ class DBHelper {
     "INSERT INTO USER (username, password, nome, email, curso) VALUES ('joaoLindo', '123456', 'João Silva', 'joao@gmail.com', 'Informática')";
     await db.execute(sql);
   }
-
-
-
 
 }
