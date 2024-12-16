@@ -23,7 +23,7 @@ class _CadastroLembretesState extends State<CadastroLembretes> {
   final TextEditingController _titulo = TextEditingController();
 
 
-  String? _repetition;
+
 
 
   Future<void> _saveMetas() async {

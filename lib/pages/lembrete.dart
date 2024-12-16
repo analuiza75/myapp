@@ -19,7 +19,7 @@ class _LembreteScreenState extends State<LembreteScreen> {
   void initState() {
     super.initState();
     loadData();
-    DBHelper().getTab();
+
 
   }
 

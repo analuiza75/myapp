@@ -16,14 +16,7 @@ class DBHelper {
     print(dbPath);
     return database;
   }
-  Future<void> getTab() async {
-    final db = await initDB();
-    final result = await db.rawQuery('PRAGMA table_info(LEMBRETE)');
 
-    for (var row in result) {
-      print('Coluna: ${row['name']}');
-    }
-  }
 
   Future<FutureOr<void>> onCreate(Database db, int version) async {
     String sql = "CREATE TABLE USER (username varchar(100) PRIMARY KEY, password varchar(100))";
