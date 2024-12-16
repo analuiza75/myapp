@@ -16,6 +16,14 @@ class DBHelper {
     print(dbPath);
     return database;
   }
+  Future<void> getTab() async {
+    final db = await initDB();
+    final result = await db.rawQuery('PRAGMA table_info(LEMBRETE)');
+
+    for (var row in result) {
+      print('Coluna: ${row['name']}');
+    }
+  }
 
   Future<FutureOr<void>> onCreate(Database db, int version) async {
     String sql = "CREATE TABLE USER (username varchar(100) PRIMARY KEY, password varchar(100))";
@@ -24,5 +32,14 @@ class DBHelper {
     sql =
     "INSERT INTO USER (username, password) VALUES ('joao@gmail.com', '123456')";
     await db.execute(sql);
+
+    sql =
+        "CREATE TABLE LEMBRETE (id INTEGER PRIMARY KEY, titulo varchar(100), materia varchar(100), text varchar(2000) )";
+    await db.execute(sql);
+
+    sql = "INSERT INTO LEMBRETE (id, titulo, materia, text) VALUES('1', 'Lipídeos', 'Biologia', 'o consumo excessivo de gorduras pode ocasionar o entupimento das artérias');";
+
+    await db.execute(sql);
+
   }
 }
