@@ -56,7 +56,7 @@ class _LembreteScreenState extends State<LembreteScreen> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              child: const Text('+ Adicionar lembrete'),
+              child: const Text('Adicionar lembrete'),
             ),
           ),
           Expanded(

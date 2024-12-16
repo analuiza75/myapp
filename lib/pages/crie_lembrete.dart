@@ -50,9 +50,7 @@ class _CadastroLembretesState extends State<CadastroLembretes> {
       print("Tudo certo");
 
 
-      //_prazo.clear();
-      // _objetivo.clear();
-      //_materia.clear();
+
     }
   }
 
