@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/db/user_dao.dart';
-
 import '../db/SharedPrefs.dart';
 
 class Perfil extends StatefulWidget {
