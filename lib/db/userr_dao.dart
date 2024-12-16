@@ -3,14 +3,14 @@ import 'package:myapp/domain/user.dart';
 import 'package:sqflite/sqflite.dart';
 
 class UserDao {
-  autenticar(String username, String password) async {
+  autenticar(String email, String password) async {
     Database db = await DBHelper().initDB();
 
     String sql = 'SELECT * FROM USER '
-        'WHERE USERNAME = ? AND '
+        'WHERE email = ? AND '
         'PASSWORD = ?;';
 
-    var result = await db.rawQuery(sql, [username, password]);
+    var result = await db.rawQuery(sql, [email, password]);
     return result.isNotEmpty;
   }
 
@@ -18,4 +18,13 @@ class UserDao {
     Database db = await DBHelper().initDB();
     db.insert('USER', user.toJson());
   }
+  Future<List<Map<String, dynamic>>> getAllData() async {
+
+    final db = await openDatabase('meu_banco.db');
+
+
+    return await db.query('minha_tabela');
+  }
+
+
 }

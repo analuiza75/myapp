@@ -6,7 +6,7 @@ import 'package:sqflite/sqflite.dart';
 class DBHelper {
   Future<Database> initDB() async {
     String path = await getDatabasesPath();
-    String dbPath = join(path, "pacote.db");
+    String dbPath = join(path, "login.db");
     Database database = await openDatabase(
       dbPath,
       version: 1,
@@ -18,11 +18,11 @@ class DBHelper {
   }
 
   Future<FutureOr<void>> onCreate(Database db, int version) async {
-    String sql = "CREATE TABLE USER (username varchar(100) PRIMARY KEY, password varchar(100))";
+    String sql = "CREATE TABLE USER (email varchar(100) PRIMARY KEY, password varchar(100))";
     await db.execute(sql);
 
     sql =
-    "INSERT INTO USER (username, password) VALUES ('joao@gmail.com', '123456')";
+    "INSERT INTO USER (email, password) VALUES ('dri@gmail.com', '123456789')";
     await db.execute(sql);
   }
 }

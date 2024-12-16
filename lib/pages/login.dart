@@ -28,7 +28,6 @@ class _Tela1State extends State<Tela1> {
         backgroundColor: const Color(0xFF66A9CF),
         body: Form(
           key: formKey,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
           child: ListView(
             children: [
               Stack(
@@ -121,11 +120,12 @@ class _Tela1State extends State<Tela1> {
                             ),
                             ElevatedButton(
                               onPressed: () {
-                                Navigator.push(
+                                print('Botão criar conta clicado');
+                                Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) {
-                                      return const AtEstude();
+                                      return AtEstude();
                                     },
                                   ),
                                 );
@@ -137,7 +137,7 @@ class _Tela1State extends State<Tela1> {
                                 ),
                                 padding: const EdgeInsets.symmetric(
                                   vertical: 4,
-                                  horizontal: 32,
+                                  horizontal: 24,
                                 ),
                               ),
                               child: Text(
