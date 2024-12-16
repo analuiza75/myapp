@@ -6,14 +6,14 @@ import '../db/metas_DAO.dart';
 import '../domain/Metas.dart';
 import 'CadastroMetas.dart';
 
-class GoalsScreen extends StatefulWidget {
-  GoalsScreen({Key? key}) : super(key: key);
+class TelaApresentar extends StatefulWidget {
+  TelaApresentar({Key? key}) : super(key: key);
 
   @override
-  State<GoalsScreen> createState() => _GoalsScreenState();
+  State<TelaApresentar> createState() => _TelaApresentarState();
 }
 
-class _GoalsScreenState extends State<GoalsScreen> {
+class _TelaApresentarState extends State<TelaApresentar> {
   List<metas> metass = [];
 
   @override
