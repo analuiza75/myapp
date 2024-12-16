@@ -46,7 +46,7 @@ class _CadastroLembretesState extends State<CadastroLembretes> {
 
 
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Meta salva com sucesso!')));
+          .showSnackBar(SnackBar(content: Text('Lembrete salvo com sucesso!')));
       print("Tudo certo");
 
 
