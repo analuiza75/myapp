@@ -39,6 +39,8 @@ dependencies:
   sqflite:
   path:
   shared_preferences:
+  geocoding:
+  dio: ^5.7.0
 
 dev_dependencies:
   flutter_test:
