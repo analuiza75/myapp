@@ -1,8 +1,11 @@
 import 'package:google_fonts/google_fonts.dart';
-import 'package:myapp/db/userr_dao.dart';
 import 'package:myapp/domain/user.dart';
-import 'package:myapp/pages/home.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/pages/login.dart';
+
+import '../db/db_helper.dart';
+import '../db/SharedPrefs.dart';
+import '../db/userr_dao.dart';
 
 class AtEstude extends StatefulWidget {
   const AtEstude({super.key});
@@ -13,13 +16,18 @@ class AtEstude extends StatefulWidget {
 
 class _AtEstudeState extends State<AtEstude> {
   TextEditingController emailController = TextEditingController();
-  TextEditingController nomeController = TextEditingController();
-  TextEditingController usernameController = TextEditingController();
   TextEditingController senhaController = TextEditingController();
   TextEditingController senhaController2 = TextEditingController();
+  TextEditingController dddController = TextEditingController();
+
 
   // Key
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  @override
+  initState() {
+    super.initState();
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,41 +63,13 @@ class _AtEstudeState extends State<AtEstude> {
           Padding(
             padding: const EdgeInsets.all(16),
             child: Form(
-              key: formKey, // Aqui é onde você conecta a chave do formulário
+              key: formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  SizedBox(height: 24),
                   TextFormField(
                     controller: emailController,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Campo e-mail obrigatório.';
-                      } else if (value.contains('@')) {
-                        return null;
-                      } else {
-                        return 'Informe um e-mail válido';
-                      }
-                    },
-                    decoration: InputDecoration(
-                      hintText: 'Email',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8)),
-                      hintStyle: GoogleFonts.montserrat(fontSize: 12),
-                    ),
-                  ),
-                  SizedBox(height: 24),
-                  TextFormField(
-                    controller: nomeController,
-                    decoration: InputDecoration(
-                      hintText: 'Full name',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8)),
-                      hintStyle: GoogleFonts.montserrat(fontSize: 12),
-                    ),
-                  ),
-                  SizedBox(height: 24),
-                  TextFormField(
-                    controller: usernameController,
                     decoration: InputDecoration(
                       hintText: 'Username',
                       border: OutlineInputBorder(
@@ -139,6 +119,17 @@ class _AtEstudeState extends State<AtEstude> {
                       hintStyle: GoogleFonts.montserrat(fontSize: 12),
                     ),
                   ),
+
+                  TextFormField(
+                    controller: emailController,
+                    decoration: InputDecoration(
+                      hintText: 'DDD',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8)),
+                      hintStyle: GoogleFonts.montserrat(fontSize: 12),
+                    ),
+                  ),
+
                   SizedBox(height: 32),
                   ElevatedButton(
                     onPressed: () {
@@ -147,24 +138,17 @@ class _AtEstudeState extends State<AtEstude> {
                         String senha2 = senhaController2.text;
 
                         if (senha == senha2) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return Home();
-                              },
-                            ),
-                          );
+                          this.onPressed();
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content:
-                            Text(
-                              "Senhas não conferem!",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
+                            SnackBar(
+                              content: Text(
+                                "Senhas não conferem!",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                ),
                               ),
-                            ),
                               backgroundColor: Colors.red,
                             ),
                           );
@@ -174,7 +158,7 @@ class _AtEstudeState extends State<AtEstude> {
                     child: Text(
                       "Create Account",
                       style: GoogleFonts.montserrat(
-                        color: Colors.black,
+                        color: Colors.white,
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
                       ),
@@ -194,12 +178,18 @@ class _AtEstudeState extends State<AtEstude> {
 
   Future<void> onPressed() async {
     if (formKey.currentState!.validate()) {
-      String email = emailController.text;
+      String userEm = emailController.text;
       String senha = senhaController.text;
 
-      User user = User(email, senha);
+      User user = User(senha, userEm);
       UserDao().saveUser(user);
-      Navigator.pop(context);
+      SharedPrefs().setUser(true);
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("CADASTRO REALIZADO COM SUCESSO!"),
+        backgroundColor: Colors.green,
+        duration: Duration(seconds: 3),
+      ));
     }
   }
 }
