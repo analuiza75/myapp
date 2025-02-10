@@ -55,7 +55,7 @@ class _LembreteScreenState extends State<LembreteScreen> {
               future: futurelembretess,
               builder: (context, snapshot) {
                 if(snapshot.hasError){
-                  return const Center(child: Text('Nenhum lembrete encontrado!'));
+                  return const Center(child: Text('Nenhum lembrete encontrado'));
                 }  else {
                   List<Lembrete> lembretess = snapshot.data!;
 

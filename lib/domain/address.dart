@@ -8,6 +8,7 @@ class Address {
   });
 
   Address.fromJson(Map<String, dynamic> json) {
+
     state = json['state'] ?? '';
     city = json['city'] ?? '';
 

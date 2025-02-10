@@ -154,7 +154,7 @@ class _AtEstudeState extends State<AtEstude> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
-                                "Senhas não conferem!",
+                                "Senhas não conferem",
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 12,

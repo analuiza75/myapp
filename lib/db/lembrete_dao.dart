@@ -11,7 +11,7 @@ class LembreteDao {
 
     List<Lembrete> lista = [];
     for (var json in result) {
-      Lembrete lembre = Lembrete.fromJson(json);
+      Lembrete lembre =  Lembrete.fromJson(json);
       lista.add(lembre);
     }
     await Future.delayed(const Duration(seconds: 4));
