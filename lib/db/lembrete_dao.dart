@@ -14,7 +14,7 @@ class LembreteDao {
       Lembrete lembre = Lembrete.fromJson(json);
       lista.add(lembre);
     }
-
+    await Future.delayed(const Duration(seconds: 4));
     return lista;
   }
 

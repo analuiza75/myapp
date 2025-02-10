@@ -3,16 +3,20 @@ import 'package:myapp/domain/user.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/pages/login.dart';
 
+
 import '../db/db_helper.dart';
 import '../db/SharedPrefs.dart';
 import '../db/userr_dao.dart';
 
+
 class AtEstude extends StatefulWidget {
   const AtEstude({super.key});
+
 
   @override
   State<AtEstude> createState() => _AtEstudeState();
 }
+
 
 class _AtEstudeState extends State<AtEstude> {
   TextEditingController emailController = TextEditingController();
@@ -21,13 +25,17 @@ class _AtEstudeState extends State<AtEstude> {
   TextEditingController dddController = TextEditingController();
 
 
+
+
   // Key
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   @override
   initState() {
     super.initState();
 
+
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -120,6 +128,7 @@ class _AtEstudeState extends State<AtEstude> {
                     ),
                   ),
 
+
                   TextFormField(
                     controller: emailController,
                     decoration: InputDecoration(
@@ -130,12 +139,14 @@ class _AtEstudeState extends State<AtEstude> {
                     ),
                   ),
 
+
                   SizedBox(height: 32),
                   ElevatedButton(
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
                         String senha = senhaController.text;
                         String senha2 = senhaController2.text;
+
 
                         if (senha == senha2) {
                           this.onPressed();
@@ -173,17 +184,22 @@ class _AtEstudeState extends State<AtEstude> {
           ),
         ],
       ),
+
+
     );
   }
+
 
   Future<void> onPressed() async {
     if (formKey.currentState!.validate()) {
       String userEm = emailController.text;
       String senha = senhaController.text;
 
+
       User user = User(senha, userEm);
       UserDao().saveUser(user);
       SharedPrefs().setUser(true);
+
 
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("CADASTRO REALIZADO COM SUCESSO!"),

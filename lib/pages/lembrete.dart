@@ -13,25 +13,16 @@ class LembreteScreen extends StatefulWidget {
 }
 
 class _LembreteScreenState extends State<LembreteScreen> {
-  List<Lembrete> lembretess = [];
+  late Future<List<Lembrete>> futurelembretess;
 
   @override
   void initState() {
     super.initState();
-    loadData();
-
-
+    futurelembretess = LembreteDao().listarLembretes();
   }
-
-  loadData() async {
-    lembretess = await LembreteDao().listarLembretes();
-    setState(() {});
-  }
-
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Seus Lembretes'),
@@ -60,53 +51,63 @@ class _LembreteScreenState extends State<LembreteScreen> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: lembretess.length,
-              itemBuilder: (context, index) {
-                Lembrete m = lembretess[index];
-                return Card(
-                  color: Colors.white,
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16), // Bordas arredondadas
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(32.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          m.titulo,
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 16,
-                        ),
-                        Text(
+            child: FutureBuilder<List<Lembrete>>(
+              future: futurelembretess,
+              builder: (context, snapshot) {
+                if(snapshot.hasError){
+                  return const Center(child: Text('Nenhum lembrete encontrado!'));
+                }  else {
+                  List<Lembrete> lembretess = snapshot.data!;
 
-                          m.materia,
-                          textAlign: TextAlign.end,
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w400,
+                  return ListView.builder(
+                    itemCount: lembretess.length,
+                    itemBuilder: (context, index) {
+                      Lembrete m = lembretess[index];
+                      return Card(
+                        color: Colors.white,
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16), // Bordas arredondadas
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(32.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                m.titulo,
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 16,
+                              ),
+                              Text(
+                                m.materia,
+                                textAlign: TextAlign.end,
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Text(
+                                m.text,
+                                style: TextStyle(
+                                  fontSize: 13.0,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Text(
-                          m.text,
-                          style: TextStyle(
-                            fontSize: 13.0,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
+                      );
+                    },
+                  );
+                }
               },
             ),
           ),

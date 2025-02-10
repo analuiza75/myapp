@@ -5,11 +5,11 @@ class AddressApi {
   final domain = 'https://brasilapi.com.br/api';
   final dio = Dio();
 
-  Future<Address> findAddressByCep(String ddd) async {
-    final response = await dio.get('$domain/ddd/v1/{ddd}');
+  Future<Address> findAddressByDDD(String ddd) async {
+    final response = await dio.get('$domain/ddd/v1/$ddd');
     Address address = Address.fromJson(response.data);
 
-    print(response);
+    print(response.data);
     return address;
   }
 }

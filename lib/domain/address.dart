@@ -1,17 +1,21 @@
 class Address {
-  late String cities;
+  late String state;
+  late String city;
 
   Address({
-    required this.cities,
+  required this.state,
+    required this.city,
   });
 
   Address.fromJson(Map<String, dynamic> json) {
-    cities = json['cities'] ?? '';
+    state = json['state'] ?? '';
+    city = json['city'] ?? '';
 
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['cities'] = this.cities;
+    data['state'] = this.state;
+    data['city'] = this.city;
 
     return data;
   }
