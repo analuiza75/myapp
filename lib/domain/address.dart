@@ -18,9 +18,9 @@ class Address {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['nome'] = this.cep;
-    data['estado'] = this.state;
-    data['id'] = this.city;
+    data['nome'] = this.nome;
+    data['estado'] = this.estado;
+    data['id'] = this.id;
 
     return data;
   }
