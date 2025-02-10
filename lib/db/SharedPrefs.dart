@@ -9,11 +9,6 @@ class SharedPrefs {
   getUser() async {
     SharedPreferences instance = await SharedPreferences.getInstance();
     bool? userStatus = instance.getBool('USER');
-    // if (userStatus == null) {
-    //   return false;
-    // } else {
-    //   return userStatus;
-    // }
 
     return userStatus ?? false;
   }

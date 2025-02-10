@@ -1,12 +1,11 @@
-import 'package:google_fonts/google_fonts.dart';
-import 'package:myapp/domain/user.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
+import 'package:myapp/domain/user.dart';
 import 'package:myapp/pages/login.dart';
-
-import '../db/db_helper.dart';
 import '../db/SharedPrefs.dart';
 import '../db/userr_dao.dart';
-
 
 class AtEstude extends StatefulWidget {
   const AtEstude({super.key});
@@ -22,57 +21,90 @@ class _AtEstudeState extends State<AtEstude> {
 
   // Key
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  @override
-  initState()  {
-    super.initState();
 
+  @override
+  void initState() {
+    super.initState();
   }
+
+  // 🔹 Método para buscar o clima da API
+  Future<Map<String, dynamic>> fetchWeather() async {
+    final url = Uri.parse("https://brasilapi.com.br/api/cptec/v1/clima/capital");
+
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        throw Exception("Erro ao buscar clima");
+      }
+    } catch (e) {
+      throw Exception("Erro: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
         children: [
-          Container(
-            height: 200,
-            width: 400,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(width: 10),
-                Text(
-                  "Sign up",
-                  style: GoogleFonts.montserratAlternates(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 31,
-                    color: Colors.white,
+          // 🔹 FutureBuilder para exibir o clima
+          FutureBuilder<Map<String, dynamic>>(
+            future: fetchWeather(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text("Erro ao carregar clima"));
+              } else if (snapshot.hasData) {
+                List<dynamic> cidades = snapshot.data?["capital"] ?? [];
+                return Container(
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Color(0xFF66A9CF),
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(30),
+                      bottomRight: Radius.circular(30),
+                    ),
                   ),
-                ),
-              ],
-            ),
-            decoration: BoxDecoration(
-              color: Color(0xFF66A9CF),
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(30),
-                bottomRight: Radius.circular(30),
-              ),
-            ),
+                  child: Column(
+                    children: [
+                      Text(
+                        "Clima das Capitais",
+                        style: GoogleFonts.montserratAlternates(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      for (var cidade in cidades)
+                        Text(
+                          "${cidade['cidade']}: ${cidade['atual']['temperatura']}°C",
+                          style: GoogleFonts.montserrat(fontSize: 16, color: Colors.white),
+                        ),
+                    ],
+                  ),
+                );
+              } else {
+                return Center(child: Text("Nenhuma informação disponível"));
+              }
+            },
           ),
+
           SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.all(16),
             child: Form(
               key: formKey,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-
                   SizedBox(height: 24),
                   TextFormField(
                     controller: emailController,
                     decoration: InputDecoration(
-                      hintText: 'Username',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8)),
+                      hintText: 'Email',
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                       hintStyle: GoogleFonts.montserrat(fontSize: 12),
                     ),
                   ),
@@ -92,8 +124,7 @@ class _AtEstudeState extends State<AtEstude> {
                     decoration: InputDecoration(
                       suffixIcon: Icon(Icons.visibility_off_outlined),
                       hintText: 'Password',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8)),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                       hintStyle: GoogleFonts.montserrat(fontSize: 12),
                     ),
                   ),
@@ -113,8 +144,7 @@ class _AtEstudeState extends State<AtEstude> {
                     decoration: InputDecoration(
                       suffixIcon: Icon(Icons.visibility_off_outlined),
                       hintText: 'Repeat Password',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8)),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                       hintStyle: GoogleFonts.montserrat(fontSize: 12),
                     ),
                   ),
@@ -126,18 +156,14 @@ class _AtEstudeState extends State<AtEstude> {
                         String senha2 = senhaController2.text;
 
                         if (senha == senha2) {
-
                           this.onPressed();
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content:
-                            Text(
-                              "Senhas não conferem!",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
+                            SnackBar(
+                              content: Text(
+                                "Senhas não conferem!",
+                                style: TextStyle(color: Colors.white, fontSize: 12),
                               ),
-                            ),
                               backgroundColor: Colors.red,
                             ),
                           );
@@ -152,14 +178,10 @@ class _AtEstudeState extends State<AtEstude> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-
-
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFF5AC22D),
                     ),
-
                   ),
-
                 ],
               ),
             ),
@@ -178,8 +200,13 @@ class _AtEstudeState extends State<AtEstude> {
       UserDao().saveUser(user);
       SharedPrefs().setUser(true);
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("CADASTRO REALIZADO COM SUCESSO!"),backgroundColor: Colors.green,duration: Duration(seconds: 3), ));
-
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("CADASTRO REALIZADO COM SUCESSO!"),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 3),
+        ),
+      );
+    }
   }
-}
 }
