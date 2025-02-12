@@ -67,7 +67,7 @@ class _LembreteScreenState extends State<LembreteScreen> {
                         color: Colors.white,
                         elevation: 4,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16), // Bordas arredondadas
+                          borderRadius: BorderRadius.circular(16),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(32.0),

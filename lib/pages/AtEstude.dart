@@ -3,10 +3,11 @@ import 'package:myapp/domain/user.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/pages/login.dart';
 
-
+import 'package:myapp/api/address_api.dart';
 import '../db/db_helper.dart';
 import '../db/SharedPrefs.dart';
 import '../db/userr_dao.dart';
+import '../domain/address.dart';
 
 
 class AtEstude extends StatefulWidget {
@@ -23,6 +24,7 @@ class _AtEstudeState extends State<AtEstude> {
   TextEditingController senhaController = TextEditingController();
   TextEditingController senhaController2 = TextEditingController();
   TextEditingController dddController = TextEditingController();
+  TextEditingController numeroController = TextEditingController();
 
 
 
@@ -130,13 +132,39 @@ class _AtEstudeState extends State<AtEstude> {
 
 
                   TextFormField(
-                    controller: emailController,
+                    controller: dddController,
                     decoration: InputDecoration(
                       hintText: 'DDD',
+                      suffixIcon: IconButton
+                        (onPressed: onPressedDddButton,
+                        icon: const Icon(Icons.search),
+
+                      ),
+
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8)),
                       hintStyle: GoogleFonts.montserrat(fontSize: 12),
                     ),
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: numeroController,
+                    validator: (value) {
+                      if (value!.isNotEmpty) {
+                        return null;
+                      } else {
+                        return "Você precisa digitar um número válido!";
+                      }
+                    },
+                    decoration: InputDecoration(
+                      suffixIcon: Icon(Icons.visibility_off_outlined),
+                      hintText: 'Password',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8)),
+                      hintStyle: GoogleFonts.montserrat(fontSize: 12),
+                    ),
+
+                    cursorColor: const Color(0xFF10397B),
                   ),
 
 
@@ -188,7 +216,23 @@ class _AtEstudeState extends State<AtEstude> {
 
     );
   }
+  Future<void> onPressedDddButton() async {
+    String cep = dddController.text;
+    try {
+      Address address = await AddressApi().findAddressByDDD(ddd);
+      numeroController.text = address.street;
+    } catch (e) {
+      showSnackBar('Ocorreu um erro inesperado!');
+    }
+  }
 
+  showSnackBar(String snackBarMessage) {
+    SnackBar snackBar = SnackBar(
+      content: Text(snackBarMessage),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
 
   Future<void> onPressed() async {
     if (formKey.currentState!.validate()) {
@@ -208,4 +252,5 @@ class _AtEstudeState extends State<AtEstude> {
       ));
     }
   }
+
 }
