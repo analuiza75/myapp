@@ -150,7 +150,7 @@ class _AtEstudeState extends State<AtEstude> {
                   TextFormField(
                     controller: numeroController,
                     validator: (value) {
-                      if (value!.isEmpty || !RegExp(r'^[0-9]+$').hasMatch(value)) {
+                      if (value!.isEmpty) {
                         return "Você precisa digitar um número válido!";
                       }
                       return null;
