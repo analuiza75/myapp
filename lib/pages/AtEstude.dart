@@ -151,7 +151,7 @@ class _AtEstudeState extends State<AtEstude> {
                     controller: numeroController,
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return "Você precisa digitar um número válido!";
+                        return "Você precisa digitar um número válido";
                       }
                       return null;
                     },
