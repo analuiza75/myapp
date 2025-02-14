@@ -17,7 +17,7 @@ class _TelaApresentacaoState extends State<TelaApresentacao> {
   }
 
   loadData() async {
-    informacao = await InformacoesDao().listarPacotes();
+    //informacao = await InformacoesDao().listarPacotes();
     setState(() {});
   }
 

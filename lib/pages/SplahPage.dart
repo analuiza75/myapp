@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:myapp/db/SharedPrefs.dart';
 import 'package:myapp/pages/home.dart';
@@ -31,7 +33,7 @@ class _SplahpageState extends State<Splahpage> {
     } else {
       Navigator.pushReplacement(context, MaterialPageRoute(
         builder: (context) {
-          return const AtEstudeee();
+          return  AtEstudeee();
         },
       ));
     }

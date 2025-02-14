@@ -22,11 +22,12 @@ class _AtEstudeState extends State<AtEstudeee> {
 
   // Key
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  @override
-  initState()  {
-    super.initState();
 
+  @override
+  initState() {
+    super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +66,6 @@ class _AtEstudeState extends State<AtEstudeee> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-
                   SizedBox(height: 24),
                   TextFormField(
                     controller: usernameController,
@@ -126,25 +126,18 @@ class _AtEstudeState extends State<AtEstudeee> {
                         String senha2 = senhaController2.text;
 
                         if (senha == senha2) {
-                          /* Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return Home();
-                              },
-                            ),
-                          );*/
                           this.onPressed();
+                          print("______________");
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content:
-                            Text(
-                              "Senhas não conferem!",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
+                            SnackBar(
+                              content: Text(
+                                "Senhas não conferem!",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                ),
                               ),
-                            ),
                               backgroundColor: Colors.red,
                             ),
                           );
@@ -182,12 +175,18 @@ class _AtEstudeState extends State<AtEstudeee> {
       SharedPrefs().setUser(true);
       SharedPrefs().saveUsername(userNam);
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("CADASTRO REALIZADO COM SUCESSO!"),backgroundColor: Colors.red,duration: Duration(seconds: 3), ));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("CADASTRO REALIZADO COM SUCESSO!"),
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 3),
+      ));
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) {
-            return TelaInformacoesExtras(username: userNam,);
+            return TelaInformacoesExtras(
+              username: userNam,
+            );
           },
         ),
       );
