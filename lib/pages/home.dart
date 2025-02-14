@@ -58,22 +58,7 @@ class _HomeState extends State<Home> {
           ),
           _buildButton(),
           _buildMenu(),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MapPage(
-                    locations: [
-                      LatLng(-9.745249814503792, -36.63152135483646),
-                    ],
-                    initialPosition: LatLng(-9.745249814503792, -36.63152135483646),
-                  ),
-                ),
-              );
-            },
-            child: Text("Abrir Mapa"),
-          ),
+
         ],
       ), /*Column(
         children: [
@@ -196,19 +181,44 @@ class _HomeState extends State<Home> {
     );
   }
 
+  void Onpressed() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MapPage(
+          locations: [
+            LatLng(-9.745249814503792, -36.63152135483646),
+          ],
+          initialPosition: LatLng(-9.745249814503792, -36.63152135483646),
+        ),
+      ),
+    );
+  }
+
   Widget _buildButton() {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () => Onpressed(),
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFF66A9CF),
           padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 40),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         ),
-        child: const Text("Comece de onde você está!",
-            style: TextStyle(color: Colors.white)),
+        child: Column(
+          children: [
+            const Text("Comece de onde você está!",
+                style: TextStyle(color: Colors.white)),
+            Text(
+              "Clique aqui para ver Pontos de Estudo!",
+              style: GoogleFonts.jomhuria(
+                  color: Colors.black,
+
+                  fontSize: 25),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -254,20 +264,12 @@ class _HomeState extends State<Home> {
     );
   }
 
-  /// Determine the current position of the device.
-  ///
-  /// When the location services are not enabled or permissions
-  /// are denied the `Future` will return an error.
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
 
-    // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
       return Future.error('Location services are disabled.');
     }
 
@@ -275,11 +277,6 @@ class _HomeState extends State<Home> {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
         return Future.error('Location permissions are denied');
       }
     }
@@ -290,8 +287,6 @@ class _HomeState extends State<Home> {
           'Location permissions are permanently denied, we cannot request permissions.');
     }
 
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
     return await Geolocator.getCurrentPosition();
   }
 }
