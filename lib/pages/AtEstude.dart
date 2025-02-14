@@ -135,40 +135,40 @@ class _AtEstudeState extends State<AtEstude> {
                     controller: dddController,
                     decoration: InputDecoration(
                       hintText: 'DDD',
-                      suffixIcon: IconButton
-                        (onPressed: onPressedDddButton,
+                      suffixIcon: IconButton(
+                        onPressed: onPressedDddButton,
                         icon: const Icon(Icons.search),
-
                       ),
-
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8)),
                       hintStyle: GoogleFonts.montserrat(fontSize: 12),
                     ),
                   ),
+
+
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: numeroController,
                     validator: (value) {
-                      if (value!.isNotEmpty) {
-                        return null;
-                      } else {
+                      if (value!.isEmpty || !RegExp(r'^[0-9]+$').hasMatch(value)) {
                         return "Você precisa digitar um número válido!";
                       }
+                      return null;
                     },
                     decoration: InputDecoration(
-                      suffixIcon: Icon(Icons.visibility_off_outlined),
-                      hintText: 'Password',
+                      suffixIcon: Icon(Icons.phone),
+                      hintText: 'Número de telefone',
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8)),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                       hintStyle: GoogleFonts.montserrat(fontSize: 12),
                     ),
-
-                    cursorColor: const Color(0xFF10397B),
+                    keyboardType: TextInputType.phone,
                   ),
 
 
-                  SizedBox(height: 32),
+
+                  const  SizedBox(height: 32),
                   ElevatedButton(
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
@@ -217,7 +217,7 @@ class _AtEstudeState extends State<AtEstude> {
     );
   }
   Future<void> onPressedDddButton() async {
-    String cep = dddController.text;
+    String ddd = dddController.text;
     try {
       Address address = await AddressApi().findAddressByDDD(ddd);
       numeroController.text = address.street;
@@ -228,9 +228,8 @@ class _AtEstudeState extends State<AtEstude> {
 
   showSnackBar(String snackBarMessage) {
     SnackBar snackBar = SnackBar(
-      content: Text(snackBarMessage),
+      content: Text("Ocorreu um erro inesperado!"),
     );
-
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
@@ -254,3 +253,9 @@ class _AtEstudeState extends State<AtEstude> {
   }
 
 }
+
+
+
+
+
+
