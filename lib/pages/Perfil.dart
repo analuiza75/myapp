@@ -10,23 +10,12 @@ class Perfil extends StatefulWidget {
 }
 
 class _Perfil extends State<Perfil> {
-  String? username;
-  Map<String, dynamic>? userDetails;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadUserData();
-  }
-
-  _loadUserData() async {
-    username = await SharedPrefs().getUsername();
+  Future<Map<String, dynamic>?> _loadUserData() async {
+    String? username = await SharedPrefs().getUsername();
     if (username != null) {
-      var data = await UserDao().getUsuario(username!);
-      setState(() {
-        userDetails = data;
-      });
+      return await UserDao().getUsuario(username);
     }
+    return null;
   }
 
   @override
@@ -36,86 +25,96 @@ class _Perfil extends State<Perfil> {
         title: const Text('Perfil'),
         backgroundColor: Colors.blue,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+      body: FutureBuilder<Map<String, dynamic>?>(
+        future: _loadUserData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return const Center(child: Text('Erro ao carregar os dados'));
+          } else if (!snapshot.hasData || snapshot.data == null) {
+            return const Center(child: Text('Nenhum dado encontrado'));
+          }
 
-            Row(
+          var userDetails = snapshot.data!;
+
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CircleAvatar(
-                  radius: 40,
-                  backgroundColor: Colors.teal.shade200,
-                  child: Text(
-                    userDetails!['username']?[0]?? '',
-                    style: const TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 40,
+                      backgroundColor: Colors.teal.shade200,
+                      child: Text(
+                        userDetails['username']?[0] ?? '',
+                        style: const TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
-                  ),
+                    const SizedBox(width: 16),
+                    Text(
+                      userDetails['username'] ?? 'Usuário',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 16),
-                Text(
-                  userDetails!['username'] ?? 'Usuário',
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
+                const SizedBox(height: 24),
+                _buildInfoRow(
+                  icon: Icons.person,
+                  label: 'Nome',
+                  value: userDetails['nome'],
+                ),
+                const Divider(),
+                _buildInfoRow(
+                  icon: Icons.email,
+                  label: 'E-mail',
+                  value: userDetails['email'] ?? 'Não informado',
+                ),
+                const Divider(),
+                _buildInfoRow(
+                  icon: Icons.school,
+                  label: 'Curso',
+                  value: userDetails['curso'] ?? 'Não informado',
+                ),
+                const Divider(),
+                const SizedBox(height: 24),
+                Center(
+                  child: ElevatedButton.icon(
+                    onPressed: () {},
+                    icon: const Icon(Icons.edit, color: Colors.white),
+                    label: const Text('Editar Perfil'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.teal,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 12,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 24),
-
-
-            _buildInfoRow(
-              icon: Icons.person,
-              label: 'Nome',
-              value: userDetails!['nome'],
-            ),
-            const Divider(),
-            _buildInfoRow(
-              icon: Icons.email,
-              label: 'E-mail',
-              value: userDetails!['email'] ?? 'Não informado',
-            ),
-            const Divider(),
-            _buildInfoRow(
-              icon: Icons.school,
-              label: 'Curso',
-              value: userDetails!['curso'] ?? 'Não informado',
-            ),
-            const Divider(),
-
-            const SizedBox(height: 24),
-            Center(
-              child: ElevatedButton.icon(
-                onPressed: () {
-
-                },
-                icon: const Icon(Icons.edit,color: Colors.white,),
-                label: const Text('Editar Perfil'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 12,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
 
-  Widget _buildInfoRow({required IconData icon, required String label, required String value}) {
+  Widget _buildInfoRow(
+      {required IconData icon, required String label, required String value}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
