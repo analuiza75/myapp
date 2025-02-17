@@ -13,7 +13,7 @@ class LembreteScreen extends StatefulWidget {
 }
 
 class _LembreteScreenState extends State<LembreteScreen> {
-  late Future<List<Lembrete>> futurelembretess;
+  Future<List<Lembrete>>? futurelembretess;
 
   @override
   void initState() {
@@ -54,9 +54,22 @@ class _LembreteScreenState extends State<LembreteScreen> {
             child: FutureBuilder<List<Lembrete>>(
               future: futurelembretess,
               builder: (context, snapshot) {
-                if(snapshot.hasError){
-                  return const Center(child: Text('Nenhum lembrete encontrado'));
-                }  else {
+
+                if(futurelembretess == null){
+                  return Center(child: Text('Dados ainda nao foram carregados'));
+                }
+
+                if(snapshot.connectionState == ConnectionState){
+                  return Center(child: CircularProgressIndicator());
+                }
+
+                if (snapshot.hasError) {
+                  return const Center(
+                      child: Text('Nenhum lembrete encontrado'));
+                }
+
+                if(snapshot.hasData) {
+
                   List<Lembrete> lembretess = snapshot.data!;
 
                   return ListView.builder(
@@ -106,9 +119,12 @@ class _LembreteScreenState extends State<LembreteScreen> {
                         ),
                       );
                     },
+
                   );
                 }
-              },
+
+                return Center(child: CircularProgressIndicator());
+              }
             ),
           ),
         ],

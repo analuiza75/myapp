@@ -18,12 +18,9 @@ class AtEstude extends StatefulWidget {
 
 
 
-
   @override
   State<AtEstude> createState() => _AtEstudeState();
 }
-
-
 
 
 class _AtEstudeState extends State<AtEstude> {
@@ -34,12 +31,6 @@ class _AtEstudeState extends State<AtEstude> {
 
 
 
-
-
-
-
-
-
   // Key
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   @override
@@ -47,11 +38,7 @@ class _AtEstudeState extends State<AtEstude> {
     super.initState();
 
 
-
-
   }
-
-
 
 
   @override
@@ -145,6 +132,7 @@ class _AtEstudeState extends State<AtEstude> {
                     ),
                   ),
 
+                  const SizedBox(height: 16),
 
 
 
@@ -163,12 +151,7 @@ class _AtEstudeState extends State<AtEstude> {
                   ),
 
 
-
-
                   const SizedBox(height: 16),
-
-
-
 
 
 

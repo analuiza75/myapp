@@ -9,7 +9,7 @@ import 'package:myapp/pages/lembrete.dart';
 void main() {
   runApp(
      MaterialApp(
-     home: AtEstude(),
+     home: LembreteScreen(),
     ),
   );
 }

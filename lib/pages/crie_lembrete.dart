@@ -77,7 +77,7 @@ class _CadastroLembretesState extends State<CadastroLembretes> {
                     TextFormField(
                       controller: _titulo,
                       decoration: const InputDecoration(
-                        labelText: 'Matéria referente',
+                        labelText: 'Disciplina referente',
                         border: OutlineInputBorder(),
                       ),
                       validator: (value) {
