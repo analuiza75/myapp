@@ -18,8 +18,11 @@ class _AtEstudeState extends State<AtEstude> {
   TextEditingController emailController = TextEditingController();
   TextEditingController senhaController = TextEditingController();
   TextEditingController senhaController2 = TextEditingController();
+  TextEditingController nomeController2 = TextEditingController();
+  TextEditingController estadoController2 = TextEditingController();
+  TextEditingController idController2 = TextEditingController();
 
-  // Key
+
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
@@ -27,7 +30,6 @@ class _AtEstudeState extends State<AtEstude> {
     super.initState();
   }
 
-  // 🔹 Método para buscar o clima da API
   Future<Map<String, dynamic>> fetchWeather() async {
     final url = Uri.parse("https://brasilapi.com.br/api/cptec/v1/clima/capital");
 
@@ -48,7 +50,6 @@ class _AtEstudeState extends State<AtEstude> {
     return Scaffold(
       body: ListView(
         children: [
-          // 🔹 FutureBuilder para exibir o clima
           FutureBuilder<Map<String, dynamic>>(
             future: fetchWeather(),
             builder: (context, snapshot) {
@@ -57,6 +58,7 @@ class _AtEstudeState extends State<AtEstude> {
               } else if (snapshot.hasError) {
                 return Center(child: Text("Erro ao carregar clima"));
               } else if (snapshot.hasData) {
+
                 List<dynamic> cidades = snapshot.data?["capital"] ?? [];
                 return Container(
                   padding: EdgeInsets.all(16),
