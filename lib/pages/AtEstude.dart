@@ -3,6 +3,7 @@ import 'package:myapp/domain/user.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/pages/login.dart';
 
+
 import 'package:myapp/api/address_api.dart';
 import '../db/db_helper.dart';
 import '../db/SharedPrefs.dart';
@@ -10,8 +11,12 @@ import '../db/userr_dao.dart';
 import '../domain/address.dart';
 
 
+
+
 class AtEstude extends StatefulWidget {
   const AtEstude({super.key});
+
+
 
 
   @override
@@ -19,12 +24,18 @@ class AtEstude extends StatefulWidget {
 }
 
 
+
+
 class _AtEstudeState extends State<AtEstude> {
   TextEditingController emailController = TextEditingController();
   TextEditingController senhaController = TextEditingController();
   TextEditingController senhaController2 = TextEditingController();
   TextEditingController dddController = TextEditingController();
-  TextEditingController numeroController = TextEditingController();
+
+
+
+
+
 
 
 
@@ -36,7 +47,11 @@ class _AtEstudeState extends State<AtEstude> {
     super.initState();
 
 
+
+
   }
+
+
 
 
   @override
@@ -131,6 +146,8 @@ class _AtEstudeState extends State<AtEstude> {
                   ),
 
 
+
+
                   TextFormField(
                     controller: dddController,
                     decoration: InputDecoration(
@@ -146,25 +163,13 @@ class _AtEstudeState extends State<AtEstude> {
                   ),
 
 
+
+
                   const SizedBox(height: 16),
-                  TextFormField(
-                    controller: numeroController,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Você precisa digitar um número válido";
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      suffixIcon: Icon(Icons.phone),
-                      hintText: 'Número de telefone',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      hintStyle: GoogleFonts.montserrat(fontSize: 12),
-                    ),
-                    keyboardType: TextInputType.phone,
-                  ),
+
+
+
+
 
 
 
@@ -174,6 +179,8 @@ class _AtEstudeState extends State<AtEstude> {
                       if (formKey.currentState!.validate()) {
                         String senha = senhaController.text;
                         String senha2 = senhaController2.text;
+
+
 
 
                         if (senha == senha2) {
@@ -214,24 +221,30 @@ class _AtEstudeState extends State<AtEstude> {
       ),
 
 
+
+
     );
   }
   Future<void> onPressedDddButton() async {
     String ddd = dddController.text;
     try {
       Address address = await AddressApi().findAddressByDDD(ddd);
-      numeroController.text = address.street;
+      setState(() {
+        dddController.text = address.state;
+      });
     } catch (e) {
-      showSnackBar('Ocorreu um erro inesperado!');
+      showSnackBar('Erro ao buscar estado!');
     }
   }
 
+
   showSnackBar(String snackBarMessage) {
     SnackBar snackBar = SnackBar(
-      content: Text("Ocorreu um erro inesperado!"),
+      content: Text(snackBarMessage),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
+
 
   Future<void> onPressed() async {
     if (formKey.currentState!.validate()) {
@@ -239,9 +252,13 @@ class _AtEstudeState extends State<AtEstude> {
       String senha = senhaController.text;
 
 
+
+
       User user = User(senha, userEm);
       UserDao().saveUser(user);
       SharedPrefs().setUser(true);
+
+
 
 
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -252,10 +269,7 @@ class _AtEstudeState extends State<AtEstude> {
     }
   }
 
+
 }
-
-
-
-
 
 
