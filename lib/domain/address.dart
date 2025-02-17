@@ -11,9 +11,9 @@ class Address {
   });
 
   Address.fromJson(Map<String, dynamic> json) {
-    cep = json['nome'] ?? '';
-    state = json['estado'] ?? '';
-    city = json['id'] ?? '';
+    nome = json['nome'] ?? '';
+    estado = json['estado'] ?? '';
+    id = json['id'] ?? '';
   }
 
   Map<String, dynamic> toJson() {
@@ -25,13 +25,3 @@ class Address {
     return data;
   }
 }
-
-
-
-
-{
-"nome": "São Benedito",
-"estado": "CE",
-"id": 4750
-}
-]

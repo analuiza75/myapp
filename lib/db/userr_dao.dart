@@ -4,7 +4,7 @@ import 'package:sqflite/sqflite.dart';
 
 class UserDao {
   autenticar(String email, String password) async {
-    Future<void> autenticar(String email, String password) async {
+    Future<bool> autenticar(String email, String password) async {
       Database db = await DBHelper().initDB();
 
       String sql = 'SELECT * FROM USER '
@@ -26,4 +26,6 @@ class UserDao {
       return await db.query('minha_tabela');
     }
   }
+
+  void saveUser(User user) {}
 }

@@ -32,7 +32,7 @@ class _SplashPageState extends State<SplashPage> {
     } else {
       Navigator.pushReplacement(context, MaterialPageRoute(
         builder: (context) {
-          return const AtEstude();
+          return const Tela1();
         },
       ));
     }

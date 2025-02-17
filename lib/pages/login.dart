@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 import 'package:myapp/db/SharedPrefs.dart';
 import 'package:myapp/db/userr_dao.dart';
 import 'package:myapp/domain/user.dart';
@@ -30,6 +32,48 @@ class _Tela1State extends State<Tela1> {
           key: formKey,
           child: ListView(
             children: [
+
+              FutureBuilder<Map<String, dynamic>>(
+                future: fetchWeather(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text("Erro ao carregar clima"));
+                  } else if (snapshot.hasData) {
+                    List<dynamic> cidades = snapshot.data?["capital"] ?? [];
+                    return Container(
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.blue.shade200,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Clima nas Capitais",
+                            style: GoogleFonts.montserratAlternates(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          for (var cidade in cidades)
+                            Text(
+                              "${cidade['cidade']}: ${cidade['atual']['temperatura']}°C",
+                              style: GoogleFonts.montserrat(fontSize: 16, color: Colors.white),
+                            ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    return Center(child: Text("Nenhuma informação disponível"));
+                  }
+                },
+              ),
+
               Stack(
                 fit: StackFit.passthrough,
                 clipBehavior: Clip.none,
@@ -116,7 +160,7 @@ class _Tela1State extends State<Tela1> {
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                ),
+                              ),
                             ),
                             ElevatedButton(
                               onPressed: () {
@@ -146,10 +190,10 @@ class _Tela1State extends State<Tela1> {
                                   color: Color(0xFF3685CD),
                                   fontSize: 12,
                                   fontWeight: FontWeight.w400,
+                                ),
                               ),
                             ),
-                            ),
-                        ],
+                          ],
                         ),
                       ),
                     ),
@@ -179,6 +223,21 @@ class _Tela1State extends State<Tela1> {
         ),
       ),
     );
+  }
+
+  Future<Map<String, dynamic>> fetchWeather() async {
+    final url = Uri.parse("https://brasilapi.com.br/api/cptec/v1/clima/capital");
+
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        throw Exception("Erro ao buscar clima");
+      }
+    } catch (e) {
+      throw Exception("Erro: $e");
+    }
   }
 
   Future<void> onPressed() async {
