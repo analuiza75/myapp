@@ -18,6 +18,10 @@ class Tela1 extends StatefulWidget {
 class _Tela1State extends State<Tela1> {
   TextEditingController emailController = TextEditingController();
   TextEditingController senhaController = TextEditingController();
+  TextEditingController nomeController = TextEditingController();
+  TextEditingController estadoController = TextEditingController();
+  TextEditingController idController = TextEditingController();
+
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -39,9 +43,11 @@ class _Tela1State extends State<Tela1> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
+                    print(snapshot.error);
                     return Center(child: Text("Erro ao carregar clima"));
                   } else if (snapshot.hasData) {
-                    List<dynamic> cidades = snapshot.data?["capital"] ?? [];
+
+                    Map<String, dynamic> cidade = snapshot.data!;
                     return Container(
                       padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
@@ -60,9 +66,9 @@ class _Tela1State extends State<Tela1> {
                             ),
                           ),
                           SizedBox(height: 10),
-                          for (var cidade in cidades)
+                          // for (var cidade in cidades)
                             Text(
-                              "${cidade['cidade']}: ${cidade['atual']['temperatura']}°C",
+                              "${cidade['cidade']}: ${cidade['estado']}  ${cidade['clima'][0]['max']} °C",
                               style: GoogleFonts.montserrat(fontSize: 16, color: Colors.white),
                             ),
                         ],
@@ -226,18 +232,20 @@ class _Tela1State extends State<Tela1> {
   }
 
   Future<Map<String, dynamic>> fetchWeather() async {
-    final url = Uri.parse("https://brasilapi.com.br/api/cptec/v1/clima/capital");
+    // 233
+    final url = Uri.parse("https://brasilapi.com.br/api/cptec/v1/clima/previsao/233");
 
-    try {
-      final response = await http.get(url);
+
+      var response = await http.get(url);
+
       if (response.statusCode == 200) {
-        return json.decode(response.body);
+        var jsonResponse = json.decode(response.body);
+       return jsonResponse;
+      return jsonResponse[0];
       } else {
         throw Exception("Erro ao buscar clima");
       }
-    } catch (e) {
-      throw Exception("Erro: $e");
-    }
+
   }
 
   Future<void> onPressed() async {
