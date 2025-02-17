@@ -1,8 +1,8 @@
 
-import 'package:flutter/material.dart';
 
-import '../db/metas_DAO.dart';
-import '../domain/Metas.dart';
+import 'package:flutter/material.dart';
+import 'package:myapp/domain/Metas.dart';
+import 'package:myapp/db/metas_DAO.dart';
 
 
 class CadastroMetas extends StatefulWidget {
@@ -28,7 +28,7 @@ class _CadastroMetasState extends State<CadastroMetas> {
 
   Future<void> _saveMetas() async {
     if (_formKey.currentState!.validate()) {
-      final mets = metas(
+      final meta = metas(
         materia: _materia.text,
         objetivo: _objetivo.text,
         prazo: _prazo.text,
@@ -39,7 +39,7 @@ class _CadastroMetasState extends State<CadastroMetas> {
 
 
       final addMetas = MetasDAO();
-      await addMetas.insertMetas(mets);
+      await addMetas.insertMetas(meta);
 
 
 
